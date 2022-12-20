@@ -12,7 +12,6 @@
 HelloWorld::HelloWorld()
 : m_button("Hello World"), m_label("Toll!")  // creates a new button with label "Hello World".
 {
-  
   set_default_size(400, 400);
   set_border_width(20);
 
