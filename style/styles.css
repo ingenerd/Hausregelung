@@ -1,0 +1,6 @@
+button {background-image: image(red);}
+button:hover {background-image: image(green);}
+button:active {background-image: image(brown);}
+label {background-image: none;}
+window.background {background-image: url("test.jpeg") }
+/*window.background {background-image: url('/home/bejo/eclipse-workspace/HausRegelung/pics/test.jpeg') }*/
