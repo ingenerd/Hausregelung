@@ -12,9 +12,8 @@
 HelloWorld::HelloWorld()
 : m_button("Hello World"), m_label("Toll!")  // creates a new button with label "Hello World".
 {
-  
   set_default_size(400, 400);
-  set_border_width(20);
+  set_border_width(25);
 
   // When the button receives the "clicked" signal, it will call the
   // on_button_clicked() method defined below.
