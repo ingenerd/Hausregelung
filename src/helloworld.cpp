@@ -12,15 +12,18 @@
 HelloWorld::HelloWorld()
 : m_button("Hello World"), m_label("Toll!")  // creates a new button with label "Hello World".
 {
-  set_default_size(400, 400);
+  set_default_size(800, 480);
+  //fullscreen();
   set_border_width(25);
 
   // When the button receives the "clicked" signal, it will call the
   // on_button_clicked() method defined below.
   m_button.signal_clicked().connect(sigc::mem_fun(*this,&HelloWorld::on_button_clicked));
-
-  m_grid.set_row_spacing(1);
-  m_grid.set_column_spacing(2);
+  //m_button.high
+  //m_grid.set_row_spacing(1);
+  //m_grid.set_column_spacing(2);
+  m_grid.set_column_homogeneous(true);
+  m_grid.set_row_homogeneous(true);
 
   m_grid.attach(m_button, 0, 0);
   m_grid.attach(m_label, 0, 1);
@@ -28,7 +31,7 @@ HelloWorld::HelloWorld()
   add(m_grid);
 
   Glib::RefPtr<Gtk::CssProvider> css_provider = Gtk::CssProvider::create();
-  css_provider->load_from_path("/home/bejo/eclipse-workspace/HausRegelung/style/styles.css");
+  css_provider->load_from_path("style/styles.css");
   /*css_provider->load_from_data(
     "button {background-image: image(cyan);}\
      button:hover {background-image: image(green);}\
