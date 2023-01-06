@@ -31,14 +31,14 @@ HelloWorld::HelloWorld()
   add(m_grid);
 
   Glib::RefPtr<Gtk::CssProvider> css_provider = Gtk::CssProvider::create();
-  //css_provider->load_from_path("style/styles.css");
-  css_provider->load_from_data(
+  css_provider->load_from_path("../style/styles.css");
+  /*css_provider->load_from_data(
     "button {background-image: image(cyan);}\
      button:hover {background-image: image(green);}\
      button:active {background-image: image(brown);}\
      label {background-image: none;}\
 	 window.background {background-image: url(\"style/test.jpeg\") }");
-  
+  */
   m_button.get_style_context()->add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
   m_label.get_style_context()->add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
   get_style_context()->add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
