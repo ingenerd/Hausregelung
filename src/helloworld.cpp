@@ -15,6 +15,9 @@ HelloWorld::HelloWorld()
   set_default_size(800, 480);
   //fullscreen();
   set_size_request(800,480);
+  set_decorated(false);
+  set_resizable(false);  
+  set_position(Gtk::WIN_POS_CENTER);
   set_border_width(25);
 
   // When the button receives the "clicked" signal, it will call the
