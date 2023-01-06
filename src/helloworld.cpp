@@ -14,6 +14,7 @@ HelloWorld::HelloWorld()
 {
   set_default_size(800, 480);
   //fullscreen();
+  set_size_request(800,480);
   set_border_width(25);
 
   // When the button receives the "clicked" signal, it will call the
