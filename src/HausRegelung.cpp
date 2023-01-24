@@ -1,14 +1,12 @@
-#include "helloworld.h"
+#include "Dachgeschoss.h"
 #include <gtkmm/application.h>
 
 int main (int argc, char *argv[])
 {
-  auto app = Gtk::Application::create(argc, argv, "org.gtkmm.example");
-  //auto app3 = Gtk::App
+  auto app = Gtk::Application::create(argc, argv, "LBW.Dachgeschoss");
 
-  HelloWorld helloworld;
+  Dachgeschoss dachgeschoss;
   
-
   //Shows the window and returns when it is closed.
-  return app->run(helloworld);
+  return app->run(dachgeschoss);
 }

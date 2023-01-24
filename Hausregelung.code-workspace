@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"makefile.launchConfigurations": [
+			{
+				"cwd": "/home/bejo/git/Hausregelung/build",
+				"binaryPath": "/home/bejo/git/Hausregelung/build/HausRegelung",
+				"binaryArgs": []
+			}
+		]
+	}
+}

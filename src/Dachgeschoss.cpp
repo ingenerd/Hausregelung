@@ -1,16 +1,18 @@
 /*
- * helloworld.cpp
+ * Dachgeschoss.cpp
  *
  *  Created on: Dec 13, 2022
  *      Author: bejo
  */
 
-#include "helloworld.h"
+#include "Dachgeschoss.h"
 #include <iostream>
+#include <glibmm.h>
+#include <giomm.h>
+
 #include <gtkmm/cssprovider.h>
 
-HelloWorld::HelloWorld()
-: m_button("Hello World"), m_label("Toll!")  // creates a new button with label "Hello World".
+Dachgeschoss::Dachgeschoss()
 {
   set_default_size(800, 480);
   //fullscreen();
@@ -18,24 +20,41 @@ HelloWorld::HelloWorld()
   set_decorated(false);
   set_resizable(false);  
   set_position(Gtk::WIN_POS_CENTER);
-  set_border_width(25);
+  //set_border_width(25);
+
+  Glib::RefPtr<Gtk::CssProvider> css_provider = Gtk::CssProvider::create();
+  //std::cout << "Hi " << (Gio::File::create_for_path("../style/styles.css"))->get_path();
+  //css_provider->load_from_path((Gio::File::create_for_path("../style/styles.css"))->get_path());
+  //css_provider->load_from_path("../style/styles.css");
+  css_provider->load_from_path("/home/bejo/git/Hausregelung/style/styles.css");
+
+  m_button = Gtk::Button("Rolladen");
+  m_label = Gtk::Label("Toll");
 
   // When the button receives the "clicked" signal, it will call the
   // on_button_clicked() method defined below.
-  m_button.signal_clicked().connect(sigc::mem_fun(*this,&HelloWorld::on_button_clicked));
+  m_button.signal_clicked().connect(sigc::mem_fun(*this,&Dachgeschoss::on_button_clicked));
   //m_button.high
   //m_grid.set_row_spacing(1);
   //m_grid.set_column_spacing(2);
-  m_grid.set_column_homogeneous(true);
-  m_grid.set_row_homogeneous(true);
+  //m_grid.set_column_homogeneous(true);
+  //m_grid.set_row_homogeneous(true);
 
-  m_grid.attach(m_button, 0, 0);
-  m_grid.attach(m_label, 0, 1);
+  //m_grid.attach(m_button, 0, 0);
+  //m_grid.attach(m_label, 0, 1);
 
-  add(m_grid);
+  grid_anordnung.set_orientation(Gtk::ORIENTATION_HORIZONTAL);
+  grid_buttons.set_orientation(Gtk::ORIENTATION_VERTICAL);
 
-  Glib::RefPtr<Gtk::CssProvider> css_provider = Gtk::CssProvider::create();
-  css_provider->load_from_path("../style/styles.css");
+  grid_buttons.add(m_button);
+  grid_buttons.add(m_label);
+
+  grid_anordnung.add(anzeige);
+  grid_anordnung.add(grid_buttons);
+
+  add(grid_anordnung);
+
+  
   /*css_provider->load_from_data(
     "button {background-image: image(cyan);}\
      button:hover {background-image: image(green);}\
@@ -52,11 +71,11 @@ HelloWorld::HelloWorld()
   show_all_children();
 }
 
-HelloWorld::~HelloWorld()
+Dachgeschoss::~Dachgeschoss()
 {
 }
 
-void HelloWorld::on_button_clicked()
+void Dachgeschoss::on_button_clicked()
 {
   std::cout << "Hello World" << std::endl;
 }
