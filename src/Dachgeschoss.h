@@ -8,6 +8,9 @@
 #ifndef SRC_DACHGESCHOSS_H_
 #define SRC_DACHGESCHOSS_H_
 
+// für timeout gegebenenfalls besseren include finden
+#include <gtkmm.h>
+
 #include <gtkmm/button.h>
 #include <gtkmm/label.h>
 #include <gtkmm/grid.h>
@@ -34,8 +37,7 @@ private:
   Gtk::Button m_button;
   Gtk::Label m_label;
 
-  int pos_x_text_Bad;
-  int pos_y_text_Bad;
+  bool again_and_again();
 };
 
 #endif /* SRC_DACHGESCHOSS_H_ */

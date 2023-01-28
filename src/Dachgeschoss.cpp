@@ -69,10 +69,19 @@ Dachgeschoss::Dachgeschoss()
   // The final step is to display this newly created widget...
   m_button.show();
   show_all_children();
-}
+
+  //infinite loop every 1000 milliseconds
+  sigc::connection conn = Glib::signal_timeout().connect(sigc::mem_fun((*this),&Dachgeschoss::again_and_again), 1000, Glib::PRIORITY_DEFAULT);
+}  
 
 Dachgeschoss::~Dachgeschoss()
 {
+}
+
+bool Dachgeschoss::again_and_again()
+{
+  std::cout << "Tick Tock" << std::endl;
+  return true;
 }
 
 void Dachgeschoss::on_button_clicked()
