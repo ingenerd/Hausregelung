@@ -18,6 +18,11 @@ Anzeige::~Anzeige()
 {
 }
 
+void Anzeige::set_t_Elt_IST(float value)
+{
+   t_Elt_IST = value;
+}
+
 bool Anzeige::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 {
   //Gtk::Allocation allocation = get_allocation();

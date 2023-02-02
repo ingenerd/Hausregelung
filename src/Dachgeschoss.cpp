@@ -9,8 +9,33 @@
 #include <iostream>
 #include <glibmm.h>
 #include <giomm.h>
-
 #include <gtkmm/cssprovider.h>
+#include <string>
+
+#include <mosquitto.h>
+
+// to make sure, mosquitto quits on termination, I guess...
+/*#include <signal.h> 
+static int run = 1;
+void handle_signal(int s)
+{
+	run = 0;
+}*/
+
+void message_callback(struct mosquitto *mosq, void *obj, const struct mosquitto_message *message)
+{
+	std::string payL((char*)message->payload);
+  bool match = 0;
+	std::cout << "Got message " << payL << " for topic " << message->topic << std::endl;
+
+	mosquitto_topic_matches_sub("test", message->topic, &match);
+  if (match) {
+		std::cout << "Got message for test topic" << std::endl;
+    try { static_cast<Dachgeschoss *>(obj)->set_t_Elt_IST(std::stof(payL)); }
+    catch (...) { std::cout << "Geht nicht!" << std::endl; }
+    static_cast<Dachgeschoss *>(obj)->queue_draw();
+  }
+}
 
 Dachgeschoss::Dachgeschoss()
 {
@@ -55,6 +80,8 @@ Dachgeschoss::Dachgeschoss()
   add(grid_anordnung);
 
   
+
+  
   /*css_provider->load_from_data(
     "button {background-image: image(cyan);}\
      button:hover {background-image: image(green);}\
@@ -69,9 +96,18 @@ Dachgeschoss::Dachgeschoss()
   // The final step is to display this newly created widget...
   m_button.show();
   show_all_children();
+  //myContext = get_window()->create_cairo_context();
+  //infinite loop every 2000 milliseconds to get new data from mqtt broker
+  sigc::connection conn = Glib::signal_timeout().connect(sigc::mem_fun((*this),&Dachgeschoss::again_and_again), 2000, Glib::PRIORITY_DEFAULT);
+  
+  mosq = mosquitto_new(NULL, true, this);
+  mosquitto_message_callback_set(mosq, message_callback);
+  int what;
+  what= mosquitto_connect(mosq, "localhost", 1883, 60);
+  std::cout << "Connect: " << what << std::endl;
 
-  //infinite loop every 1000 milliseconds
-  sigc::connection conn = Glib::signal_timeout().connect(sigc::mem_fun((*this),&Dachgeschoss::again_and_again), 1000, Glib::PRIORITY_DEFAULT);
+  mosquitto_subscribe(mosq, NULL, "test", 0);
+
 }  
 
 Dachgeschoss::~Dachgeschoss()
@@ -81,12 +117,21 @@ Dachgeschoss::~Dachgeschoss()
 bool Dachgeschoss::again_and_again()
 {
   std::cout << "Tick Tock" << std::endl;
+  int what;
+  what = mosquitto_loop(mosq, 100, 1);
+  std::cout << "Loop: " << what << std::endl;
   return true;
 }
 
 void Dachgeschoss::on_button_clicked()
 {
   std::cout << "Hello World" << std::endl;
+}
+
+void Dachgeschoss::set_t_Elt_IST(float value)
+{
+  anzeige.set_t_Elt_IST(value);
+  show_all_children();
 }
 
 

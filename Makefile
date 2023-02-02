@@ -29,7 +29,7 @@ CPPFLAGS := $(INC_FLAGS) -MMD -MP
 # The final build step.
 $(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
 #	echo $(test)
-	$(CXX) $(OBJS) `pkg-config --libs gtkmm-3.0` -o $@ $(LDFLAGS)
+	$(CXX) $(OBJS) `pkg-config --libs gtkmm-3.0` -lmosquitto -o $@ $(LDFLAGS)
 
 # Build step for C source
 $(BUILD_DIR)/%.c.o: %.c

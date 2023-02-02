@@ -10,7 +10,8 @@ class Anzeige : public Gtk::DrawingArea
 {
 public:
   Anzeige();
-  virtual ~Anzeige();
+  virtual ~Anzeige(); 
+  void set_t_Elt_IST(float);
 
 private:
   //Override default signal handler:

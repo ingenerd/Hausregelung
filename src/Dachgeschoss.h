@@ -24,6 +24,8 @@ class Dachgeschoss : public Gtk::Window
 public:
   Dachgeschoss();
   virtual ~Dachgeschoss();
+  //Cairo::RefPtr<Cairo::Context>& getContext() {return myContext;};
+  void set_t_Elt_IST(float);
 
 private:
   //Signal handlers:
@@ -34,10 +36,12 @@ private:
   Gtk::Grid grid_buttons;
 
   Anzeige anzeige;
+  //Cairo::RefPtr<Cairo::Context> myContext;
   Gtk::Button m_button;
   Gtk::Label m_label;
 
   bool again_and_again();
+  struct mosquitto *mosq;
 };
 
 #endif /* SRC_DACHGESCHOSS_H_ */
