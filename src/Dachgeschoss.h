@@ -8,8 +8,7 @@
 #ifndef SRC_DACHGESCHOSS_H_
 #define SRC_DACHGESCHOSS_H_
 
-// für timeout gegebenenfalls besseren include finden
-#include <gtkmm.h>
+#include "definitions.h"
 
 #include <gtkmm/button.h>
 #include <gtkmm/label.h>
@@ -29,7 +28,7 @@ class Dachgeschoss : public Gtk::Window
 public:
   Dachgeschoss();
   virtual ~Dachgeschoss();
-  void set_t_Elt_IST(float);
+  void set_t(float value, ZimmerTemp identifier);
 
 private:
   //Signal handlers:

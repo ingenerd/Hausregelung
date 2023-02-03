@@ -1,5 +1,5 @@
 #include "Anzeige.h"
-#include "bjsColors.h"
+#include "definitions.h"
 
 #include <iostream>
 #include <iomanip>
@@ -10,17 +10,32 @@
 Anzeige::Anzeige()
 {
   set_size_request (495, 480);
-  t_Elt_IST = 19;
+  t_Elt_IST = 0;
   t_Elt_SOLL = 22.2;
+  t_Bad_IST = 0;
+  t_Bad_SOLL = 24.2;
+  t_KiVo_IST = 0;
+  t_KiVo_SOLL = 22.2;
+  t_KiHi_IST = 0;
+  t_KiHi_SOLL = 22.2;
 }
 
 Anzeige::~Anzeige()
 {
 }
 
-void Anzeige::set_t_Elt_IST(float value)
+void Anzeige::set_t(float value, ZimmerTemp identifier)
 {
-   t_Elt_IST = value;
+  switch(identifier){
+  case ZimmerTemp::Elt_IST: t_Elt_IST = value; break;
+  case ZimmerTemp::Elt_SOLL: t_Elt_SOLL = value; break;
+  case ZimmerTemp::Bad_IST: t_Bad_IST = value; break;
+  case ZimmerTemp::Bad_SOLL: t_Bad_SOLL = value; break;
+  case ZimmerTemp::KiVo_IST: t_KiVo_IST = value; break;
+  case ZimmerTemp::KiVo_SOLL: t_KiVo_SOLL = value; break;
+  case ZimmerTemp::KiHi_IST: t_KiHi_IST = value; break;
+  case ZimmerTemp::KiHi_SOLL: t_KiHi_SOLL = value; break;
+  }
 }
 
 bool Anzeige::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
@@ -34,17 +49,11 @@ bool Anzeige::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
   cr->rectangle(0, 0, 480, 800);
   cr->fill();
   
-  // Bad
-  zeigeTemp(cr,21.56,24,140,235);
-
-  // Kind vorne
-  zeigeTemp(cr,23.4,22,140,115);
-
-  // Kind hinten
-  zeigeTemp(cr,21,22,345,115);
-
-  // Eltern
   zeigeTemp(cr,t_Elt_IST,t_Elt_SOLL,345,265);
+  zeigeTemp(cr,t_Bad_IST,t_Bad_SOLL,140,235);
+  zeigeTemp(cr,t_KiVo_IST,t_KiVo_SOLL,140,115);
+  zeigeTemp(cr,t_KiHi_IST,t_KiHi_SOLL,345,115);
+
   return true;
 }
 

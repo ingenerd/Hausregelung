@@ -6,6 +6,7 @@
  */
 
 #include "Dachgeschoss.h"
+#include "definitions.h"
 #include <iostream>
 #include <glibmm.h>
 #include <giomm.h>
@@ -13,14 +14,6 @@
 #include <string>
 
 #include <mosquitto.h>
-
-// to make sure, mosquitto quits on termination, I guess...
-/*#include <signal.h> 
-static int run = 1;
-void handle_signal(int s)
-{
-	run = 0;
-}*/
 
 Dachgeschoss::Dachgeschoss()
 {
@@ -90,30 +83,46 @@ Dachgeschoss::Dachgeschoss()
   mosq = mosquitto_new(NULL, true, this);
   mosquitto_message_callback_set(mosq, message_callback);
   mosquitto_connect(mosq, "localhost", 1883, 60);
-  mosquitto_subscribe(mosq, NULL, "Sensoren/+", 0);
+  mosquitto_subscribe(mosq, NULL, "Sensoren/T/+", 0);
   mosquitto_loop_start(mosq);
 }  
 
 Dachgeschoss::~Dachgeschoss()
 {
   dauerTrigger.disconnect();
-  mosquitto_unsubscribe(mosq, NULL, "Sensoren/+");
+  mosquitto_unsubscribe(mosq, NULL, "Sensoren/T/+");
   mosquitto_destroy(mosq);
   mosquitto_lib_cleanup();
 }
 
 void message_callback(struct mosquitto *mosq, void *obj, const struct mosquitto_message *message)
 {
-	std::string payL((char*)message->payload);
   bool match = 0;
-	std::cout << "Got message " << payL << " for topic " << message->topic << std::endl;
+	std::string payL((char*)message->payload);
+  std::string top((char*)message->topic);
+  
+	std::cout << "Got message " << payL << " for topic " << top << std::endl;
 
-	mosquitto_topic_matches_sub("Sensoren/+", message->topic, &match);
+	mosquitto_topic_matches_sub("Sensoren/T/+", message->topic, &match);
   if (match) {
-    try { static_cast<Dachgeschoss *>(obj)->set_t_Elt_IST(std::stof(payL)); }
-    catch (...) { std::cout << "Geht nicht!" << std::endl; }
-    static_cast<Dachgeschoss *>(obj)->queue_draw();
+    if (top == "Sensoren/T/Elt") {
+      try { static_cast<Dachgeschoss *>(obj)->set_t(std::stof(payL),ZimmerTemp::Elt_IST); }
+      catch (...) { std::cout << "Geht nicht!" << std::endl; }
+    }
+    if (top == "Sensoren/T/Bad") {
+      try { static_cast<Dachgeschoss *>(obj)->set_t(std::stof(payL),ZimmerTemp::Bad_IST); }
+      catch (...) { std::cout << "Geht nicht!" << std::endl; }
+    }
+    if (top == "Sensoren/T/KiVo") {
+      try { static_cast<Dachgeschoss *>(obj)->set_t(std::stof(payL),ZimmerTemp::KiVo_IST); }
+      catch (...) { std::cout << "Geht nicht!" << std::endl; }
+    }
+    if (top == "Sensoren/T/KiHi") {
+      try { static_cast<Dachgeschoss *>(obj)->set_t(std::stof(payL),ZimmerTemp::KiHi_IST); }
+      catch (...) { std::cout << "Geht nicht!" << std::endl; }
+    }
   }
+  static_cast<Dachgeschoss *>(obj)->queue_draw();
 }
 
 bool Dachgeschoss::again_and_again()
@@ -127,9 +136,9 @@ void Dachgeschoss::on_button_clicked()
   std::cout << "Hello World" << std::endl;
 }
 
-void Dachgeschoss::set_t_Elt_IST(float value)
+void Dachgeschoss::set_t(float value, ZimmerTemp identifier)
 {
-  anzeige.set_t_Elt_IST(value);
+  anzeige.set_t(value, identifier);
   show_all_children();
 }
 

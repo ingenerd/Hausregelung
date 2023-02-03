@@ -4,6 +4,9 @@
 #ifndef SRC_ANZEIGE_H_
 #define SRC_ANZEIGE_H_
 
+#include "definitions.h"
+#include <string>
+
 #include <gtkmm/drawingarea.h>
 
 class Anzeige : public Gtk::DrawingArea
@@ -11,7 +14,7 @@ class Anzeige : public Gtk::DrawingArea
 public:
   Anzeige();
   virtual ~Anzeige(); 
-  void set_t_Elt_IST(float);
+  void set_t(float value, ZimmerTemp identifier);
 
 private:
   //Override default signal handler:
