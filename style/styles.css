@@ -1,4 +1,4 @@
-button {background-image: image(rgb(247, 0, 255));}
+button {background-image: none;} /*image(rgb(247, 0, 255));}*/
 button:hover {background-image: image(green);}
 button:active {background-image: image(brown);}
 label {background-image: none;}

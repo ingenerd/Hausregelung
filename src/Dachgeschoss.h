@@ -29,10 +29,13 @@ public:
   Dachgeschoss();
   virtual ~Dachgeschoss();
   void set_t(float value, ZimmerTemp identifier);
+  Visualisierung get_modus();
 
 private:
   //Signal handlers:
   void on_button_clicked();
+  void next_modus();
+  //void prev_modus();
 
   //Member widgets:
   Gtk::Grid grid_anordnung;

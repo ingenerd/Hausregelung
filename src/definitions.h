@@ -33,4 +33,8 @@ enum class ZimmerTemp {
   KiHi_IST, KiHi_SOLL
 };
 
+enum class Visualisierung {
+  Grundriss, Schema, Wetter
+};
+
 #endif /* DEFINITIONS_H_ */

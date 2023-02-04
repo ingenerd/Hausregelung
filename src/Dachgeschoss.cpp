@@ -36,7 +36,8 @@ Dachgeschoss::Dachgeschoss()
 
   // When the button receives the "clicked" signal, it will call the
   // on_button_clicked() method defined below.
-  m_button.signal_clicked().connect(sigc::mem_fun(*this,&Dachgeschoss::on_button_clicked));
+  //m_button.signal_clicked().connect(sigc::mem_fun(*this,&Dachgeschoss::on_button_clicked));
+  m_button.signal_clicked().connect(sigc::mem_fun(*this,&Dachgeschoss::next_modus));
   //m_button.high
   //m_grid.set_row_spacing(1);
   //m_grid.set_column_spacing(2);
@@ -135,6 +136,21 @@ void Dachgeschoss::on_button_clicked()
 {
   std::cout << "Hello World" << std::endl;
 }
+
+Visualisierung Dachgeschoss::get_modus()
+{
+  return (anzeige.get_modus());
+}
+
+void Dachgeschoss::next_modus()
+{
+  Visualisierung akt = get_modus();
+  if (akt == Visualisierung::Grundriss) {anzeige.set_modus(Visualisierung::Schema);}
+  if (akt == Visualisierung::Schema) {anzeige.set_modus(Visualisierung::Wetter);}
+  if (akt == Visualisierung::Wetter) {anzeige.set_modus(Visualisierung::Grundriss);}
+}
+  
+//void prev_modus();
 
 void Dachgeschoss::set_t(float value, ZimmerTemp identifier)
 {

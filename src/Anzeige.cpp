@@ -10,14 +10,15 @@
 Anzeige::Anzeige()
 {
   set_size_request (495, 480);
-  t_Elt_IST = 0;
+  t_Elt_IST = -66.6;
   t_Elt_SOLL = 22.2;
-  t_Bad_IST = 0;
+  t_Bad_IST = -66.6;
   t_Bad_SOLL = 24.2;
-  t_KiVo_IST = 0;
+  t_KiVo_IST = -66.6;
   t_KiVo_SOLL = 22.2;
-  t_KiHi_IST = 0;
+  t_KiHi_IST = -66.6;
   t_KiHi_SOLL = 22.2;
+  aktModus = Visualisierung::Grundriss;
 }
 
 Anzeige::~Anzeige()
@@ -38,12 +39,38 @@ void Anzeige::set_t(float value, ZimmerTemp identifier)
   }
 }
 
+void Anzeige::set_modus(Visualisierung akt)
+{
+  aktModus = akt;
+}
+
+Visualisierung Anzeige::get_modus()
+{
+  return (aktModus);
+}
+
 bool Anzeige::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
+{
+  if (aktModus == Visualisierung::Grundriss) {zeigeGrundriss(cr);}
+  if (aktModus == Visualisierung::Schema) {zeigeSchema(cr);}
+
+  return true;
+}
+
+void Anzeige::zeigeSchema(const Cairo::RefPtr<Cairo::Context>& cr)
 {
   //Gtk::Allocation allocation = get_allocation();
   //const int breite = allocation.get_width();
   //const int hoehe = allocation.get_height();
 
+  auto grundriss = Gdk::Pixbuf::create_from_file("/home/bejo/git/Hausregelung/style/test.jpeg");
+  Gdk::Cairo::set_source_pixbuf(cr, grundriss);
+  cr->rectangle(0, 0, 480, 800);
+  cr->fill();
+}
+
+void Anzeige::zeigeGrundriss(const Cairo::RefPtr<Cairo::Context>& cr)
+{
   auto grundriss = Gdk::Pixbuf::create_from_file("/home/bejo/git/Hausregelung/style/DG_LBW_2.png");
   Gdk::Cairo::set_source_pixbuf(cr, grundriss);
   cr->rectangle(0, 0, 480, 800);
@@ -53,9 +80,8 @@ bool Anzeige::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
   zeigeTemp(cr,t_Bad_IST,t_Bad_SOLL,140,235);
   zeigeTemp(cr,t_KiVo_IST,t_KiVo_SOLL,140,115);
   zeigeTemp(cr,t_KiHi_IST,t_KiHi_SOLL,345,115);
-
-  return true;
 }
+
 
 void Anzeige::zeigeTemp(const Cairo::RefPtr<Cairo::Context>& cr, float t_IST, float t_SOLL, int x, int y)
 {
