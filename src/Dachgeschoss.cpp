@@ -12,6 +12,7 @@
 #include <giomm.h>
 #include <gtkmm/cssprovider.h>
 #include <string>
+#include <chrono>
 
 #include <mosquitto.h>
 
@@ -108,19 +109,19 @@ void message_callback(struct mosquitto *mosq, void *obj, const struct mosquitto_
   if (match) {
     if (top == "Sensoren/T/Elt") {
       try { static_cast<Dachgeschoss *>(obj)->set_t(std::stof(payL),ZimmerTemp::Elt_IST); }
-      catch (...) { std::cout << "Geht nicht!" << std::endl; }
+      catch (...) { std::cerr << std::chrono::time_point_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now()) << ": MQTT Wert unplausibel für T_IST_Elt!" << std::endl; }
     }
     if (top == "Sensoren/T/Bad") {
       try { static_cast<Dachgeschoss *>(obj)->set_t(std::stof(payL),ZimmerTemp::Bad_IST); }
-      catch (...) { std::cout << "Geht nicht!" << std::endl; }
+      catch (...) { std::cerr << "MQTT Wert unplausibel für T_IST_Bad!" << std::endl; }
     }
     if (top == "Sensoren/T/KiVo") {
       try { static_cast<Dachgeschoss *>(obj)->set_t(std::stof(payL),ZimmerTemp::KiVo_IST); }
-      catch (...) { std::cout << "Geht nicht!" << std::endl; }
+      catch (...) { std::cerr << "MQTT Wert unplausibel für T_IST_KiVo!" << std::endl; }
     }
     if (top == "Sensoren/T/KiHi") {
       try { static_cast<Dachgeschoss *>(obj)->set_t(std::stof(payL),ZimmerTemp::KiHi_IST); }
-      catch (...) { std::cout << "Geht nicht!" << std::endl; }
+      catch (...) { std::cerr << "MQTT Wert unplausibel für T_IST_KiHi!!" << std::endl; }
     }
   }
   static_cast<Dachgeschoss *>(obj)->queue_draw();
@@ -155,7 +156,6 @@ void Dachgeschoss::next_modus()
 void Dachgeschoss::set_t(float value, ZimmerTemp identifier)
 {
   anzeige.set_t(value, identifier);
-  show_all_children();
 }
 
 
