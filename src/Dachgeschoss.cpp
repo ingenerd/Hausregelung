@@ -97,6 +97,15 @@ Dachgeschoss::~Dachgeschoss()
   mosquitto_lib_cleanup();
 }
 
+void log_light(std::string text)
+{
+  auto now = std::chrono::system_clock::now().time_since_epoch();
+  long millis = static_cast<long>(std::chrono::duration_cast<std::chrono::milliseconds>(now).count());
+  long seccis = millis/1000;
+  millis = millis%1000;
+  std::cerr << seccis << "." << millis << ": " << text << std::endl; 
+}
+
 void message_callback(struct mosquitto *mosq, void *obj, const struct mosquitto_message *message)
 {
   bool match = 0;
@@ -109,19 +118,19 @@ void message_callback(struct mosquitto *mosq, void *obj, const struct mosquitto_
   if (match) {
     if (top == "Sensoren/T/Elt") {
       try { static_cast<Dachgeschoss *>(obj)->set_t(std::stof(payL),ZimmerTemp::Elt_IST); }
-      catch (...) { std::cerr << std::chrono::time_point_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now()) << ": MQTT Wert unplausibel für T_IST_Elt!" << std::endl; }
+      catch (...) { log_light("MQTT Wert unplausibel für T_IST_Elt!"); }
     }
     if (top == "Sensoren/T/Bad") {
       try { static_cast<Dachgeschoss *>(obj)->set_t(std::stof(payL),ZimmerTemp::Bad_IST); }
-      catch (...) { std::cerr << "MQTT Wert unplausibel für T_IST_Bad!" << std::endl; }
+      catch (...) { log_light("MQTT Wert unplausibel für T_IST_Bad!"); }
     }
     if (top == "Sensoren/T/KiVo") {
       try { static_cast<Dachgeschoss *>(obj)->set_t(std::stof(payL),ZimmerTemp::KiVo_IST); }
-      catch (...) { std::cerr << "MQTT Wert unplausibel für T_IST_KiVo!" << std::endl; }
+      catch (...) { log_light("MQTT Wert unplausibel für T_IST_KiVo!"); }
     }
     if (top == "Sensoren/T/KiHi") {
       try { static_cast<Dachgeschoss *>(obj)->set_t(std::stof(payL),ZimmerTemp::KiHi_IST); }
-      catch (...) { std::cerr << "MQTT Wert unplausibel für T_IST_KiHi!!" << std::endl; }
+      catch (...) { log_light("MQTT Wert unplausibel für T_IST_KiHi!!"); }
     }
   }
   static_cast<Dachgeschoss *>(obj)->queue_draw();
