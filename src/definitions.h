@@ -1,6 +1,36 @@
 #ifndef DEFINITIONS_H_
 #define DEFINITIONS_H_
 
+const int BREITE       = 800;
+const int HOEHE        = 480;
+const int RAND         =  10;
+const int TOGGLEBREITE =  50; //Breite der Togglebuttons (sofern diese nicht anderweitig größer angelegt werden...)
+const int SPACER       =   5; //Abstand zwischen Togglebuttons und Mitte
+
+//Temperatur-Namen, die so leserlicher Funktionen übergeben werden können
+enum class ZimmerTemp {
+  Elt_IST, Elt_SOLL, 
+  Bad_IST, Bad_SOLL, 
+  KiVo_IST, KiVo_SOLL, 
+  KiHi_IST, KiHi_SOLL
+};
+
+//Rolladen-Namen, die so leserlicher Funktionen übergeben werden können
+enum class ZimmerRolladen {
+  Elt_Roll,
+  Bad_Roll,
+  KiVo1_Roll,
+  KiVo2_Roll,
+  KiHi1_Roll,
+  KiHi2_Roll,
+};
+
+//Arten, die in der Anzeige gezeigt und durchgetoggelt werden können
+enum class Visualisierung {
+  Grundriss, Schema, Wetter
+};
+
+//Farben
 #define bjsYellowLight   0.949019607843137 , 0.874509803921569, 0.270588235294118
 #define bjsYellowRegular 0.890196078431372 , 0.792156862745098, 0
 #define bjsYellowDark    0.729411764705882 , 0.588235294117647, 0
@@ -25,34 +55,5 @@
 #define bjsGreyLight     0.827450980392157 , 0.843137254901961, 0.811764705882353
 #define bjsGreyRegular   0.533333333333333 , 0.541176470588235, 0.52156862745098
 #define bjsGreyDark      0.180392156862745 , 0.203921568627451, 0.211764705882353
-
-//Temperatur-Namen, die so leserlicher Funktionen übergeben werden können
-enum class ZimmerTemp {
-  Elt_IST, Elt_SOLL, 
-  Bad_IST, Bad_SOLL, 
-  KiVo_IST, KiVo_SOLL, 
-  KiHi_IST, KiHi_SOLL
-};
-
-//Rolladen-Namen, die so leserlicher Funktionen übergeben werden können
-enum class ZimmerRolladen {
-  Elt_Roll,
-  Bad_Roll,
-  KiVo1_Roll,
-  KiVo2_Roll,
-  KiHi1_Roll,
-  KiHi2_Roll,
-};
-
-//Rolladen-Zustände
-enum class RolladenZust {
-  voll_offen, voll_geschlossen, halb_offen, lichtspalte  
-};
-
-//Arten, die in der Anzeige gezeigt und durchgetoggelt werden können
-enum class Visualisierung {
-  Grundriss, Schema, Wetter
-};
-
 
 #endif /* DEFINITIONS_H_ */

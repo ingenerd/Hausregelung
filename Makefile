@@ -7,7 +7,6 @@ SRC_DIRS := ./src
 # Find all the C and C++ files we want to compile
 # Note the single quotes around the * expressions. Make will incorrectly expand these otherwise.
 SRCS := $(shell find $(SRC_DIRS) -name '*.cpp' -or -name '*.c' -or -name '*.s')
-#test := $(shell pwd)
 
 # String substitution for every C/C++ file.
 # As an example, hello.cpp turns into ./build/hello.cpp.o
@@ -28,7 +27,6 @@ CPPFLAGS := $(INC_FLAGS) -MMD -MP
 
 # The final build step.
 $(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
-#	echo $(test)
 	$(CXX) $(OBJS) `pkg-config --libs gtkmm-3.0` -lmosquitto -o $@ $(LDFLAGS)
 
 # Build step for C source

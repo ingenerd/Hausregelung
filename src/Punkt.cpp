@@ -25,3 +25,10 @@ bool Punkt::drinnen(const Punkt A, const Punkt B)
     }
     return check; 
 }
+
+bool Punkt::drinnen(const Punkt C, const int Breite, const int Hoehe)
+{
+  Punkt A(int(C.get_x()-Breite/2), int(C.get_y()+Hoehe/2));
+  Punkt B(int(C.get_x()+Breite/2), int(C.get_y()-Hoehe/2));
+  return drinnen(A,B);
+}

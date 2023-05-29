@@ -8,7 +8,7 @@
   set_resizable(false);
 }*/
 
-RolladenMenu::RolladenMenu(Dachgeschoss& mutter):hauptEbene{mutter}
+RolladenMenu::RolladenMenu(Dachgeschoss& mutter) : hauptEbene{mutter}
 {
   set_resizable(false);
   set_default_size(600,360);

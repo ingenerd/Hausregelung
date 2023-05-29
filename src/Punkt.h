@@ -10,6 +10,7 @@ class Punkt
         int get_y() const;
 
         bool drinnen(const Punkt A, const Punkt B);
+        bool drinnen(const Punkt C, const int Breite, const int Hoehe);
 
     private:
         int x;
