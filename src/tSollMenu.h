@@ -21,7 +21,7 @@ class tSollMenu : public Gtk::Window
   public:
     //RolladenMenu();
     tSollMenu(Dachgeschoss&);
-    void set_ort(TEMP_ENUM wo);
+    void set_ort(TEMP_ENUM wo, float old);
     void set_tSoll();
 
   private:
@@ -31,11 +31,16 @@ class tSollMenu : public Gtk::Window
     //Sollwert für diesen Ort einstellen:
     TEMP_ENUM ort;
    
-    Gtk::Grid grid_haupt_teilung; 
+    Gtk::Grid grid_teilung_horizontal; 
+    Gtk::Grid grid_teilung_vertikal; 
+
+    Gtk::Label spacer_1, spacer_2, spacer_3;
+
     Gtk::Label bezeichnung;
     Glib::RefPtr<Gtk::Adjustment>  spinSettings;
     Gtk::SpinButton wert;
     Gtk::Button button_nehmen;
+    Gtk::Button button_abbrechen;
 };
 
 #endif /* SRC_TSOLLMENU_H_ */

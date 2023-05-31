@@ -1,9 +1,17 @@
 #include "Daten.h"
+#include <mosquitto.h>
 
 Daten::Daten()
 {
-    for (int i = 0; i<=T_ANZAHL; ++i)
-        {t[i]=-66.6;}
+    t[T_KiVo_IST ] =-66.0;
+    t[T_KiVo_SOLL]= 20.0;
+    t[T_KiHi_IST ]=-66.0;
+    t[T_KiHi_SOLL]= 20.0;
+    t[T_BAD_IST  ]=-66.0;
+    t[T_BAD_SOLL ]= 22.0;
+    t[T_ELT_IST  ]=-66.0;
+    t[T_ELT_SOLL ]= 20.0;
+    t[T_UMG      ]=-66.0;
     for (int i = 0; i<=R_ANZAHL; ++i)
         {rZust[i]=RolladenZust::voll_offen;
          rWahl[i]=false;}

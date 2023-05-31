@@ -1,6 +1,7 @@
 #ifndef SRC_DACHGESCHOSS_H_
 #define SRC_DACHGESCHOSS_H_
 
+#include <ctime>
 #include "definitions.h"
 
 #include <gtkmm/button.h>
@@ -20,18 +21,24 @@ class Dachgeschoss : public Gtk::Grid
 {
 
 public:
-  Dachgeschoss(std::shared_ptr<Daten>& data);
+  Dachgeschoss(std::shared_ptr<Daten>& data, struct mosquitto *mosq);
   
   void RolladenFahren();
 
   Daten& get_allData();
 
   void tSoll_menu(TEMP_ENUM wo); //tSollmenü einblenden (Muss public sein, da die DG_Anzeige darauf zugreift)
-  void set_tSoll(float wert);
+  void set_tSoll(TEMP_ENUM wo, float wert);
 
 private:
+  sigc::connection uhrTick;
+  bool uhrAktualisieren();
+  char datum_str[14]; //alter Typ, um mit den ctime-Funktionen zu arbeiten
+  char uhr_str[9];    //alter Typ, um mit den ctime-Funktionen zu arbeiten
+
+  Gtk::Label datum, uhrzeit;
+
   //Signal handlers:
-  void on_button_clicked(); //testzwecke
   void next_modus(); //Anzeige durchtoggeln rechts
   void prev_modus(); //Anzeige durchtoggeln links
 
@@ -52,8 +59,11 @@ private:
   //Sollwerte für Temperaturen
   tSollMenu window_tSoll;
 
-  //Zugriff auf Daten
+  //Zugriff auf lokales Datenobjekt
   std::shared_ptr<Daten> allData;
+
+  //Für MQTT Kommunikation
+  struct mosquitto *mosq;
 
   //graphische Anzeige des Grundrisses mit Daten
   //Gtk::EventBox eventbox; // war zu Testzwecken drin... kann am Ende wohl weg
@@ -65,10 +75,6 @@ private:
 
   //button für Rolladenmenü-Fenster
   Gtk::Button button_rolladen;
-  
-  //Testzwecke
-  Gtk::Button m_button;
-  Gtk::Label m_label;
 };
 
 #endif /* SRC_DACHGESCHOSS_H_ */

@@ -1,5 +1,5 @@
 #include <iostream>
-
+#include <chrono>
 #include <mosquitto.h>
 
 #include "Daten.h"
@@ -27,26 +27,27 @@ int main (int argc, char *argv[])
   // (z.B.: Sollwerte über Programm oder Istwerte über Sensoren...)
   auto data = std::make_shared<Daten>();
 
-  // Selbstgebaute Inhalte, die in der Mitte durchgetoggelt werden können.
-  // Es müssen Zeiger auf Gtk::Widget (Gtk::Grid) sein.
-  // Unique_ptr (mit oder ohne std::make_unique) tun es nicht, da die Grundstruktur mit einer Initializer List instanziiert wird.
-  Gtk::Widget* ho = new Gtk::Button("");
-  Gtk::Widget* hey = new Gtk::Button("Oha");
-  ho->set_size_request(55,200);
-  Gtk::Widget* pDachgeschoss = new Dachgeschoss(data);
-
-  GrundStruktur* pGrundStruktur = new GrundStruktur{pDachgeschoss, ho, hey};
-  // Verknüpfung zum globalen Signal, wenn der mosquitto Handler gelaufen ist. 
-  signal_info_erhalten.connect(sigc::mem_fun(*pGrundStruktur, &GrundStruktur::draw));
-
   //Mosquitto-Instanz (reine C-Bibliothek) zur Kommunikation über mqtt
   struct mosquitto *mosq;
   mosq = mosquitto_new(NULL, true, data.get());
   //mosq = mosquitto_new(NULL, true, grundStruktur);
   mosquitto_message_callback_set(mosq, mosq_message_callback);
   mosquitto_connect(mosq, "localhost", 1883, 60);
-  mosquitto_subscribe(mosq, NULL, "Sensoren/T/+", 0);
+  mosquitto_subscribe(mosq, NULL, "Sensoren/T/#", 0);
+  mosquitto_subscribe(mosq, NULL, "Sollwerte/T/#", 0);
   mosquitto_loop_start(mosq);
+
+  // Selbstgebaute Inhalte, die in der Mitte durchgetoggelt werden können.
+  // Es müssen Zeiger auf Gtk::Widget (Gtk::Grid) sein.
+  // Unique_ptr (mit oder ohne std::make_unique) tun es nicht, da die Grundstruktur mit einer Initializer List instanziiert wird.
+  Gtk::Widget* ho = new Gtk::Button("");
+  Gtk::Widget* hey = new Gtk::Button("Oha");
+  ho->set_size_request(55,200);
+  Gtk::Widget* pDachgeschoss = new Dachgeschoss(data, mosq);
+
+  GrundStruktur* pGrundStruktur = new GrundStruktur{pDachgeschoss, ho, hey};
+  // Verknüpfung zum globalen Signal, wenn der mosquitto Handler gelaufen ist. 
+  signal_info_erhalten.connect(sigc::mem_fun(*pGrundStruktur, &GrundStruktur::draw));
 
   // Start der GUI
   int eStatus = app->run(*pGrundStruktur);
@@ -57,7 +58,7 @@ int main (int argc, char *argv[])
   delete pDachgeschoss;
   delete pGrundStruktur;
 
-  mosquitto_unsubscribe(mosq, NULL, "Sensoren/T/+");
+  mosquitto_unsubscribe(mosq, NULL, "Sensoren/T/#");
   mosquitto_destroy(mosq);
   mosquitto_lib_cleanup();
 
@@ -98,6 +99,25 @@ void mosq_message_callback(struct mosquitto *mosq, void *obj, const struct mosqu
     if (top == "Sensoren/T/Elt") {
       try { static_cast<Daten *>(obj)->set_t(T_ELT_IST, std::stof(payL)); }
       catch (...) { mosq_log_light("MQTT Wert unplausibel für T_ELT_IST!"); }
+    }
+  }
+  mosquitto_topic_matches_sub("Sollwerte/T/+", message->topic, &match);
+  if (match) {
+    if (top == "Sollwerte/T/KiVo") {
+      try { static_cast<Daten *>(obj)->set_t(T_KiVo_SOLL, std::stof(payL)); }
+      catch (...) { mosq_log_light("MQTT Wert unplausibel für T_KiVo_SOLL!"); }
+    }
+    if (top == "Sollwerte/T/KiHi") {
+      try { static_cast<Daten *>(obj)->set_t(T_KiHi_SOLL, std::stof(payL)); }
+      catch (...) { mosq_log_light("MQTT Wert unplausibel für T_KiHi_SOLL!"); }
+    }
+    if (top == "Sollwerte/T/Bad") {
+      try { static_cast<Daten *>(obj)->set_t(T_BAD_SOLL, std::stof(payL)); }
+      catch (...) { mosq_log_light("MQTT Wert unplausibel für T_BAD_SOLL!"); }
+    }
+    if (top == "Sollwerte/T/Elt") {
+      try { static_cast<Daten *>(obj)->set_t(T_ELT_SOLL, std::stof(payL)); }
+      catch (...) { mosq_log_light("MQTT Wert unplausibel für T_ELT_SOLL!"); }
     }
   }
   signal_info_erhalten.emit();

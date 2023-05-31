@@ -67,14 +67,17 @@ bool DG_Anzeige::on_anzeige_clicked(GdkEventButton* event) //Reaktion auf Klick 
 
   Punkt Klick(int(event->x),int(event->y));
   if (get_modus() == Visualisierung::Grundriss) {
-    if (Klick.drinnen(pkt_r_Bad, breiteBox, breiteBox)) { toggle_r_auswahl(ZimmerRolladen::Bad_Roll); }
-    if (Klick.drinnen(pkt_r_Elt, breiteBox, breiteBox)) { toggle_r_auswahl(ZimmerRolladen::Elt_Roll); }
+    if (Klick.drinnen(pkt_r_Bad,   breiteBox, breiteBox)) { toggle_r_auswahl(ZimmerRolladen::Bad_Roll); }
+    if (Klick.drinnen(pkt_r_Elt,   breiteBox, breiteBox)) { toggle_r_auswahl(ZimmerRolladen::Elt_Roll); }
     if (Klick.drinnen(pkt_r_KiVo1, breiteBox, breiteBox)) { toggle_r_auswahl(ZimmerRolladen::KiVo1_Roll); }
     if (Klick.drinnen(pkt_r_KiVo2, breiteBox, breiteBox)) { toggle_r_auswahl(ZimmerRolladen::KiVo2_Roll); }
     if (Klick.drinnen(pkt_r_KiHi1, breiteBox, breiteBox)) { toggle_r_auswahl(ZimmerRolladen::KiHi1_Roll); }
     if (Klick.drinnen(pkt_r_KiHi2, breiteBox, breiteBox)) { toggle_r_auswahl(ZimmerRolladen::KiHi2_Roll); }
 
-    if (Klick.drinnen(pkt_t_Bad, 100, 50)) { signal_tSollMenu.emit(T_BAD_SOLL); }
+    if (Klick.drinnen(pkt_t_Bad , 100, 50)) { signal_tSollMenu.emit(T_BAD_SOLL ); }
+    if (Klick.drinnen(pkt_t_Elt , 100, 50)) { signal_tSollMenu.emit(T_ELT_SOLL ); }
+    if (Klick.drinnen(pkt_t_KiVo, 100, 50)) { signal_tSollMenu.emit(T_KiVo_SOLL); }
+    if (Klick.drinnen(pkt_t_KiHi, 100, 50)) { signal_tSollMenu.emit(T_KiHi_SOLL); }
   }
 
   queue_draw();
