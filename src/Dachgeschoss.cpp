@@ -90,6 +90,7 @@ Dachgeschoss::Dachgeschoss(std::shared_ptr<Daten>& data, struct mosquitto *mosq)
   //m_label.get_style_context()->add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
   //get_style_context()->add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
+  //Datum und Uhrzeitanzeige
   Pango::FontDescription font;
   font.set_family("Monospace");
   font.set_weight(Pango::WEIGHT_NORMAL);
@@ -103,6 +104,7 @@ Dachgeschoss::Dachgeschoss(std::shared_ptr<Daten>& data, struct mosquitto *mosq)
   auto context_u = uhrzeit.get_pango_context();
   context_u->set_font_description(font);
 
+  uhrAktualisieren();
 
   show_all_children();
 }
